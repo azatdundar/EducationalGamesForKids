@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -90,8 +92,11 @@ fun QuestionText(question : String){
 fun ButtonText(number: Int){
     Button(onClick = {
         /*TODO*/
-    }) {
-        Text(text = number.toString(), fontSize = 45 .sp
+    },
+        modifier = Modifier.size(100.dp),
+        shape = RoundedCornerShape(16.dp)
+        ) {
+        Text(text = number.toString(), fontSize = 50 .sp
         )
     }
 }

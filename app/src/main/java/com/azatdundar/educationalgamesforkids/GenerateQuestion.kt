@@ -17,6 +17,7 @@ fun GenerateQuestion() : Map<String, Any>{
     }
 
     val question = "$num1   $sign  $num2 "
+
     val answer = when(sign) {
         '+' -> num1 + num2
         '-' -> num1-num2
