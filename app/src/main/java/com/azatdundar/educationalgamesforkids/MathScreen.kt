@@ -149,7 +149,7 @@ fun PreviousButton(){
 
 fun NextButton(){
     Button(onClick = {
-    /*TODO*/
+
     },
         shape = CircleShape,
         modifier = Modifier.size(80.dp),
