@@ -19,6 +19,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,18 +33,58 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.core.os.requestProfiling
 
 
 @Composable
-
 fun MathScreen(navController: NavHostController) {
+    val numbers = (0..20).toMutableList()
+
+    val questions = Array(30) {""}
+    val answers = Array(30){0}
+
+    var questionNumber  by remember { mutableStateOf(0) }
+    val questionsData = GenerateQuestion()
+
+    for(i in 0..29){
+        questions[i] = questionsData["question"] as String
+        answers[i] = questionsData["answer"] as Int
+    }
+
+    val question = questions[questionNumber]
+    val answer = answers[questionNumber]
+
+    numbers.remove(answer)
+
     Surface(modifier = Modifier
         .fillMaxSize(),
         color = Color.Green
         ) {
-        Question()
 
-    }
+        Column(verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            QuestionText(question = question)
+            Spacer(modifier = Modifier.padding(25.dp))
+            Row {
+                ButtonText(number = numbers.random(), answers[questionNumber])
+                Spacer(modifier = Modifier.padding(30.dp))
+                ButtonText(number = answers[questionNumber], answers[questionNumber])
+            }
+            Spacer(modifier = Modifier.padding(80.dp))
+
+            Row {
+                PreviousButton()
+                Spacer(modifier = Modifier.padding(50.dp))
+                NextButton()
+
+            }
+
+
+
+        }
 }
 
 
@@ -50,36 +92,6 @@ fun MathScreen(navController: NavHostController) {
 @Composable
 fun Question(){
 
-    val numbers = (0..20).toMutableList()
-
-
-    val questionData = GenerateQuestion()
-    val question = questionData["question"] as String
-    val answer = questionData["answer"] as Int
-
-    numbers.remove(answer)
-
-    println("Question: $question")
-    println("Answer: $answer")
-
-    Column(verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-        QuestionText(question = question)
-        Spacer(modifier = Modifier.padding(25.dp))
-        Row {
-            ButtonText(number = numbers.random())
-            Spacer(modifier = Modifier.padding(30.dp))
-            ButtonText(number = answer)
-        }
-        Spacer(modifier = Modifier.padding(80.dp))
-
-        Row {
-            PreviousButton()
-            Spacer(modifier = Modifier.padding(50.dp))
-            NextButton()
-
-        }
 
 
 
@@ -107,10 +119,15 @@ fun QuestionText(question : String){
 
 @Composable
 
-fun ButtonText(number: Int){
+fun ButtonText(number: Int, answer : Int){
     Button(
         onClick = {
-            /*TODO*/
+            if(number == answer){
+                println("Your answer is correct!")
+            }
+            else{
+                println("Your answer is wrong")
+            }
         },
 
         modifier = Modifier.size(150.dp),
@@ -126,7 +143,7 @@ fun ButtonText(number: Int){
 
 fun PreviousButton(){
     Button(onClick = {
-        /*TODO*/
+
     },
         shape = CircleShape,
         modifier = Modifier.size(80.dp),
