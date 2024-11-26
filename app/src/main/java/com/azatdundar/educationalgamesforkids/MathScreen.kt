@@ -1,5 +1,6 @@
 package com.azatdundar.educationalgamesforkids
 
+import android.content.pm.PackageManager.ComponentEnabledSetting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,32 +37,41 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.core.os.requestProfiling
+import kotlin.random.Random
 
 
 @Composable
 fun MathScreen(navController: NavHostController) {
     val numbers = (0..20).toMutableList()
-
+    var questionNumber  by remember { mutableStateOf(0) }
     val questions = Array(30) {""}
     val answers = Array(30){0}
 
-    var questionNumber  by remember { mutableStateOf(0) }
-    val questionsData = GenerateQuestion()
+
+
 
     for(i in 0..29){
-        questions[i] = questionsData["question"] as String
-        answers[i] = questionsData["answer"] as Int
+        val questionsData = GenerateQuestion()
+        questions[i] = remember { questionsData["question"] as String }
+        answers[i] = remember { questionsData["answer"] as Int }
     }
+
 
     val question = questions[questionNumber]
     val answer = answers[questionNumber]
 
     numbers.remove(answer)
 
+    val possible_answers = mutableListOf(numbers.random(), answer)
+    val randomIndex = Random.nextInt(possible_answers.size)
+    val option1 = possible_answers[randomIndex]
+    possible_answers.remove(option1)
+    val option2 = possible_answers[0]
+
     Surface(modifier = Modifier
         .fillMaxSize(),
-        color = Color.Green
-        ) {
+        color = Color(red = 0, green = 35, blue = 0)
+    ) {
 
         Column(verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -69,16 +79,20 @@ fun MathScreen(navController: NavHostController) {
             QuestionText(question = question)
             Spacer(modifier = Modifier.padding(25.dp))
             Row {
-                ButtonText(number = numbers.random(), answers[questionNumber])
+                ButtonText(number = option1, answer)
                 Spacer(modifier = Modifier.padding(30.dp))
-                ButtonText(number = answers[questionNumber], answers[questionNumber])
+                ButtonText(number = option2, answer)
             }
             Spacer(modifier = Modifier.padding(80.dp))
 
             Row {
-                PreviousButton()
+                PreviousButton(){
+                    questionNumber--
+                }
                 Spacer(modifier = Modifier.padding(50.dp))
-                NextButton()
+                NextButton(){
+                    questionNumber++
+                }
 
             }
 
@@ -89,16 +103,10 @@ fun MathScreen(navController: NavHostController) {
 
 
 
-@Composable
-fun Question(){
-
-
-
-
-    }
 
 
 }
+
 @Composable
 fun QuestionText(question : String){
     val gaamliFontFamily = FontFamily(
@@ -116,34 +124,46 @@ fun QuestionText(question : String){
 
 
 }
-
 @Composable
 
 fun ButtonText(number: Int, answer : Int){
+    val purple = Color(0xFF800080)
+    var isClicked by remember {mutableStateOf(false)}
+    var isAnswerCorrect by remember { mutableStateOf(true) }
     Button(
         onClick = {
+            isClicked = true
             if(number == answer){
                 println("Your answer is correct!")
+                isAnswerCorrect = true
             }
             else{
                 println("Your answer is wrong")
+                isAnswerCorrect = false
             }
         },
-
         modifier = Modifier.size(150.dp),
         shape = RoundedCornerShape(16.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = when{
+                isAnswerCorrect && isClicked-> Color.Green
+                !isAnswerCorrect && isClicked -> Color.Red
+                else -> purple
+            }
+        )
 
         ) {
         Text(text = number.toString(), fontSize = 50 .sp
         )
+
     }
 }
 
 @Composable
 
-fun PreviousButton(){
+fun PreviousButton(onClick: () -> Unit){
     Button(onClick = {
-
+                     onClick()
     },
         shape = CircleShape,
         modifier = Modifier.size(80.dp),
@@ -164,9 +184,9 @@ fun PreviousButton(){
 
 @Composable
 
-fun NextButton(){
+fun NextButton(onClick : ()->Unit){
     Button(onClick = {
-
+                     onClick()
     },
         shape = CircleShape,
         modifier = Modifier.size(80.dp),
@@ -180,13 +200,15 @@ fun NextButton(){
             modifier = Modifier.size(30.dp)
             )
     }
+
 }
+
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewMathScreen() {
-    // Burada NavHostController'ı geçici olarak oluşturuyoruz
-    val navController = rememberNavController() // Bu fonksiyonu kullanabilmek için 'import androidx.navigation.compose.rememberNavController' eklemeyi unutmayın
+
+    val navController = rememberNavController()
     MathScreen(navController = navController)
 }
 
