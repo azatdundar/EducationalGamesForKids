@@ -48,8 +48,6 @@ fun MathScreen(navController: NavHostController) {
     val answers = Array(30){0}
 
 
-
-
     for(i in 0..29){
         val questionsData = GenerateQuestion()
         questions[i] = remember { questionsData["question"] as String }
