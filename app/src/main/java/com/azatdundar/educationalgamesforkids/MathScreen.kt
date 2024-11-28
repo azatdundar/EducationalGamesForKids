@@ -69,7 +69,7 @@ fun MathScreen(navController: NavHostController) {
 
     val question = questions[questionNumber]
     val answer = answers[questionNumber]
-
+    var x = 3
 
 
 
@@ -96,11 +96,11 @@ fun MathScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.padding(80.dp))
 
             Row {
-                PreviousButton(){
+                PreviousButton(questionNumber){
                     questionNumber--
                 }
                 Spacer(modifier = Modifier.padding(50.dp))
-                NextButton(){
+                NextButton(questionNumber){
                     questionNumber++
                 }
 
@@ -173,7 +173,7 @@ fun ButtonText(number: Int, answer : Int){
 
 @Composable
 
-fun PreviousButton(onClick: () -> Unit){
+fun PreviousButton(questionNum : Int,onClick: () -> Unit){
     Button(onClick = {
                      onClick()
     },
@@ -182,6 +182,10 @@ fun PreviousButton(onClick: () -> Unit){
         colors = ButtonDefaults.buttonColors(
             containerColor = Color(0xFF4fa3e3)
         ),
+        enabled = when{
+            questionNum == 0 -> false
+            else -> true
+        }
 
     ){
         Icon(
@@ -196,7 +200,7 @@ fun PreviousButton(onClick: () -> Unit){
 
 @Composable
 
-fun NextButton(onClick : ()->Unit){
+fun NextButton(questionNum : Int,onClick : ()->Unit){
     Button(onClick = {
                      onClick()
     },
@@ -204,7 +208,8 @@ fun NextButton(onClick : ()->Unit){
         modifier = Modifier.size(80.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color(0xFF4fa3e3)
-        )
+        ),
+        enabled = questionNum < 29
     ) {
         Icon(imageVector = Icons.Default.ArrowForward,
             contentDescription = "Next",
