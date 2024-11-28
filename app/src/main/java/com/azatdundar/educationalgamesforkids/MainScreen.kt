@@ -48,7 +48,7 @@ fun MainScreen(navController: NavHostController) {
                 horizontalArrangement = Arrangement.Center
             ){
                 CategoryImage(imageRes = R.drawable.alfabe, categoryName = "Alfabe" ) {
-                    println("alfabe")
+                    navController.navigate("AlphabetScreen")
                 }
             }
 

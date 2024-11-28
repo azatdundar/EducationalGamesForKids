@@ -17,6 +17,10 @@ fun Nav(){
         composable(route = "MathScreen") {
              MathScreen(navController)
         }
+
+        composable(route ="AlphabetScreen") {
+            AlphabetScreen(navController)
+        }
     }
 
 }

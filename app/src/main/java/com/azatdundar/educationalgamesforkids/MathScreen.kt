@@ -35,6 +35,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.setValue
 import androidx.core.os.requestProfiling
 import kotlin.random.Random
@@ -44,14 +45,23 @@ import kotlin.random.Random
 fun MathScreen(navController: NavHostController) {
     val numbers = (0..20).toMutableList()
     var questionNumber  by remember { mutableStateOf(0) }
+    var isClicked by remember { mutableStateOf(false) }
+
     val questions = Array(30) {""}
     val answers = Array(30){0}
+    val options1 = Array(30){0}
+    val options2 = Array(30){0}
 
 
     for(i in 0..29){
         val questionsData = GenerateQuestion()
         questions[i] = remember { questionsData["question"] as String }
         answers[i] = remember { questionsData["answer"] as Int }
+        val possible_answers = mutableListOf(numbers.random(), answers[i])
+        val randomIndex = Random.nextInt(possible_answers.size)
+        options1[i] = remember { possible_answers[randomIndex] }
+        possible_answers.remove(options1[i])
+        options2[i] = remember { possible_answers[0] }
     }
 
 
@@ -60,11 +70,7 @@ fun MathScreen(navController: NavHostController) {
 
     numbers.remove(answer)
 
-    val possible_answers = mutableListOf(numbers.random(), answer)
-    val randomIndex = Random.nextInt(possible_answers.size)
-    val option1 = possible_answers[randomIndex]
-    possible_answers.remove(option1)
-    val option2 = possible_answers[0]
+
 
     Surface(modifier = Modifier
         .fillMaxSize(),
@@ -77,9 +83,13 @@ fun MathScreen(navController: NavHostController) {
             QuestionText(question = question)
             Spacer(modifier = Modifier.padding(25.dp))
             Row {
-                ButtonText(number = option1, answer)
+                ButtonText(number = options1[questionNumber], answer)
+
+
                 Spacer(modifier = Modifier.padding(30.dp))
-                ButtonText(number = option2, answer)
+                ButtonText(number = options2[questionNumber], answer)
+
+
             }
             Spacer(modifier = Modifier.padding(80.dp))
 
@@ -125,12 +135,14 @@ fun QuestionText(question : String){
 @Composable
 
 fun ButtonText(number: Int, answer : Int){
-    val purple = Color(0xFF800080)
     var isClicked by remember {mutableStateOf(false)}
-    var isAnswerCorrect by remember { mutableStateOf(true) }
+    val purple = Color(0xFF800080)
+    var isAnswerCorrect by remember{ mutableStateOf<Boolean?>(null)}
+
+
     Button(
         onClick = {
-            isClicked = true
+
             if(number == answer){
                 println("Your answer is correct!")
                 isAnswerCorrect = true
@@ -144,8 +156,8 @@ fun ButtonText(number: Int, answer : Int){
         shape = RoundedCornerShape(16.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = when{
-                isAnswerCorrect && isClicked-> Color.Green
-                !isAnswerCorrect && isClicked -> Color.Red
+                (isAnswerCorrect == true) -> Color.Green
+               ( isAnswerCorrect == false)-> Color.Red
                 else -> purple
             }
         )
@@ -199,6 +211,10 @@ fun NextButton(onClick : ()->Unit){
             )
     }
 
+}
+
+fun dondur(x : Boolean):Boolean{
+    return x
 }
 
 
