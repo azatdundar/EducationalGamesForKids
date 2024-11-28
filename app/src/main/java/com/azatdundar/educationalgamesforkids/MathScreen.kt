@@ -57,18 +57,20 @@ fun MathScreen(navController: NavHostController) {
         val questionsData = GenerateQuestion()
         questions[i] = remember { questionsData["question"] as String }
         answers[i] = remember { questionsData["answer"] as Int }
+        numbers.remove(answers[i])
         val possible_answers = mutableListOf(numbers.random(), answers[i])
         val randomIndex = Random.nextInt(possible_answers.size)
         options1[i] = remember { possible_answers[randomIndex] }
         possible_answers.remove(options1[i])
         options2[i] = remember { possible_answers[0] }
+        numbers.add(answers[i])
     }
 
 
     val question = questions[questionNumber]
     val answer = answers[questionNumber]
 
-    numbers.remove(answer)
+
 
 
 
