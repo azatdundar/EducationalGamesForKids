@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.azatdundar.educationalgamesforkids.ui.theme.EducationalGamesForKidsTheme
 
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +25,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Nav()
+                    Nav(null)
                 }
             }
         }
@@ -39,7 +40,7 @@ fun GreetingPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            Nav()
+            Nav(null)
         }
     }
 }

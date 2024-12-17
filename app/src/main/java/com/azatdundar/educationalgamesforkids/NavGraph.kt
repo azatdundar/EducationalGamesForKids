@@ -1,12 +1,13 @@
 package com.azatdundar.educationalgamesforkids
 
+import android.speech.tts.TextToSpeech
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun Nav(){
+fun Nav(tts : TextToSpeech?){
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "MainScreen"){
@@ -19,7 +20,7 @@ fun Nav(){
         }
 
         composable(route ="AlphabetScreen") {
-            AlphabetScreen(navController)
+            AlphabetScreen(navController = navController, tts = tts)
         }
     }
 

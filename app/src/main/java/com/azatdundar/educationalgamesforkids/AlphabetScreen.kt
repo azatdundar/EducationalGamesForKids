@@ -30,18 +30,23 @@ import androidx.navigation.compose.rememberNavController
 
 
 @Composable
-fun AlphabetScreen(navController: NavHostController) {
+fun AlphabetScreen(navController: NavHostController, tts: TextToSpeech?) {
+
+    var isSpeaking by remember { mutableStateOf(false) }
+
+
+
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
             LetterButton(letter = "A")
             LetterButton(letter = "B")
-
         }
     }
 
 }
+
 
 
 @Composable
@@ -79,5 +84,7 @@ fun LetterText(letter : String){
 @Composable
 fun PreviewAlphabetScreen() {
     val navController = rememberNavController()
-    AlphabetScreen(navController)
+    Surface {
+        AlphabetScreen(navController, tts = null)
+    }
 }
