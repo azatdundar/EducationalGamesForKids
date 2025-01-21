@@ -1,5 +1,7 @@
 package com.azatdundar.educationalgamesforkids
 
+import android.app.AlertDialog
+import android.content.Context
 import android.content.pm.PackageManager.ComponentEnabledSetting
 import android.widget.Space
 import androidx.compose.foundation.background
@@ -15,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -40,95 +43,38 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.os.requestProfiling
 import androidx.navigation.navOptions
+import nl.dionsegijn.konfetti.compose.KonfettiView
+import nl.dionsegijn.konfetti.core.Party
+import nl.dionsegijn.konfetti.core.Position
+import nl.dionsegijn.konfetti.core.emitter.Emitter
+import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 
 @Composable
 fun MathScreen(navController: NavHostController) {
     questionArea()
-    /*val numbers = (0..20).toMutableList()
-    var questionNumber  by remember { mutableIntStateOf(0) }
-    
-
-    val questions = Array(30) {""}
-    val answers = Array(30){0}
-    val options1 = Array(30){0}
-    val options2 = Array(30){0}
 
 
-    for(i in 0..29){
-        val questionsData = GenerateQuestion()
-        questions[i] = remember { questionsData["question"] as String }
-        answers[i] = remember { questionsData["answer"] as Int }
-        numbers.remove(answers[i])
-        val possible_answers = mutableListOf(numbers.random(), answers[i])
-        val randomIndex = Random.nextInt(possible_answers.size)
-        options1[i] = remember { possible_answers[randomIndex] }
-        possible_answers.remove(options1[i])
-        options2[i] = remember { possible_answers[0] }
-        numbers.add(answers[i])
-    }
-
-
-    val question = questions[questionNumber]
-    val answer = answers[questionNumber]
-
-*/
-    /*Surface(modifier = Modifier
-        .fillMaxSize(),
-        color = Color(red = 0, green = 35, blue = 0)
-    ) {
-
-        Column(verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            questionArea()
-            /*
-            Row {
-                /*
-                ButtonText(number = options1[questionNumber], answer){
-
-                }
-
-
-                Spacer(modifier = Modifier.padding(30.dp))
-                ButtonText(number = options2[questionNumber], answer){
-
-                }
-*/
-
-            }
-
-
-            Row {
-                /*PreviousButton(questionNumber){
-                    questionNumber--
-                }
-                Spacer(modifier = Modifier.padding(50.dp))
-                NextButton(questionNumber, questions.size){
-                    questionNumber++
-                }
-*/
-            }
-*/
-
-
-        }
 }
 
-
-
-*/
-
-}
 @Composable
 fun questionArea(){
+
+
+
 
     val numbers = (0..20).toMutableList()
     var questionNumber  by remember { mutableIntStateOf(0) }
     var isClicked by remember { mutableStateOf(false) }
+    var isAnswerCorrect by remember { mutableStateOf(false) }
+    var isQuizFinished by remember { mutableStateOf(false) }
+    var score by remember { mutableStateOf(0) }
+
+    val builder = AlertDialog.Builder(LocalContext.current)
 
     val questions = Array(30) {""}
     val answers = Array(30){0}
@@ -156,19 +102,30 @@ fun questionArea(){
         .fillMaxSize(),
         color = Color(red = 0, green = 35, blue = 0)
     ) {
+
+
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             QuestionText(question = question)
             Row {
+                Spacer(modifier = Modifier.padding(10.dp))
                 ButtonText(number = options1[questionNumber], answer = answers[questionNumber],isSelected = isClicked) {
                     isClicked = true
+                    if (options1[questionNumber] == answers[questionNumber]){
+                        isAnswerCorrect = true
+                        score++
+                    }
                 }
                 Spacer(modifier = Modifier.padding(30.dp))
 
                 ButtonText(number = options2[questionNumber], answer = answers[questionNumber], isSelected = isClicked) {
                     isClicked = true
+                    if(options2[questionNumber] == answers[questionNumber]){
+                        isAnswerCorrect = true
+                        score++
+                    }
                 }
                 Spacer(modifier = Modifier.padding(20.dp))
 
@@ -184,6 +141,18 @@ fun questionArea(){
                     questionNumber++
                     isClicked = false
                 }
+            }
+                Spacer(modifier = Modifier.size(40.dp))
+                finishQuizButton {
+                    builder.setTitle("Finish the quiz")
+                        .setTitle("Are you sure to finish the game")
+                        .setPositiveButton("Yes"){dialog, which ->
+                            //
+                        }
+                        .setNegativeButton("Cancel"){dialog, which ->
+
+                        }
+
             }
         }
     }
@@ -280,6 +249,17 @@ fun NextButton(questionNum : Int,numOfTotalQuestions : Int,onClick : ()->Unit){
 
 }
 
+@Composable
+fun finishQuizButton(onClick: () -> Unit){
+    Button(onClick = {  onClick()
+    },
+        modifier = Modifier.size(200.dp, 50.dp),
+        colors = ButtonDefaults.buttonColors(Color.Magenta)
+    ) {
+        Text(text = "Finish Quiz")
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable
@@ -288,4 +268,3 @@ fun PreviewMathScreen() {
     val navController = rememberNavController()
     MathScreen(navController = navController)
 }
-
