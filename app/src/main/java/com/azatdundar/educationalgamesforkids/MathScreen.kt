@@ -143,15 +143,16 @@ fun questionArea(){
                 }
             }
                 Spacer(modifier = Modifier.size(40.dp))
-                finishQuizButton {
+                FinishQuizButton {
                     builder.setTitle("Finish the quiz")
                         .setTitle("Are you sure to finish the game")
                         .setPositiveButton("Yes"){dialog, which ->
-                            //
+                            
                         }
                         .setNegativeButton("Cancel"){dialog, which ->
-
+                            println("Cancel")
                         }
+                    builder.show()
 
             }
         }
@@ -250,7 +251,7 @@ fun NextButton(questionNum : Int,numOfTotalQuestions : Int,onClick : ()->Unit){
 }
 
 @Composable
-fun finishQuizButton(onClick: () -> Unit){
+fun FinishQuizButton(onClick: () -> Unit){
     Button(onClick = {  onClick()
     },
         modifier = Modifier.size(200.dp, 50.dp),
