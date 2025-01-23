@@ -45,6 +45,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.os.requestProfiling
+import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Party
@@ -56,13 +57,13 @@ import kotlin.random.Random
 
 @Composable
 fun MathScreen(navController: NavHostController) {
-    questionArea()
+    questionArea(navController)
 
 
 }
 
 @Composable
-fun questionArea(){
+fun questionArea(navController: NavHostController){
 
 
 
@@ -102,62 +103,74 @@ fun questionArea(){
         .fillMaxSize(),
         color = Color(red = 0, green = 35, blue = 0)
     ) {
-
-
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            QuestionText(question = question)
-            Row {
-                Spacer(modifier = Modifier.padding(10.dp))
-                ButtonText(number = options1[questionNumber], answer = answers[questionNumber],isSelected = isClicked) {
-                    isClicked = true
-                    if (options1[questionNumber] == answers[questionNumber]){
-                        isAnswerCorrect = true
-                        score++
+        if (isQuizFinished) {
+            val context = LocalContext.current
+            ResultScreen(navController = navController, score = score) {
+                navController.navigate("MainScreen")
+            }
+        } else {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                QuestionText(question = question)
+                Row {
+                    Spacer(modifier = Modifier.padding(10.dp))
+                    ButtonText(
+                        number = options1[questionNumber],
+                        answer = answers[questionNumber],
+                        isSelected = isClicked
+                    ) {
+                        isClicked = true
+                        if (options1[questionNumber] == answers[questionNumber]) {
+                            isAnswerCorrect = true
+                            score++
+                        }
                     }
-                }
-                Spacer(modifier = Modifier.padding(30.dp))
+                    Spacer(modifier = Modifier.padding(30.dp))
 
-                ButtonText(number = options2[questionNumber], answer = answers[questionNumber], isSelected = isClicked) {
-                    isClicked = true
-                    if(options2[questionNumber] == answers[questionNumber]){
-                        isAnswerCorrect = true
-                        score++
+                    ButtonText(
+                        number = options2[questionNumber],
+                        answer = answers[questionNumber],
+                        isSelected = isClicked
+                    ) {
+                        isClicked = true
+                        if (options2[questionNumber] == answers[questionNumber]) {
+                            isAnswerCorrect = true
+                            score++
+                        }
                     }
+                    Spacer(modifier = Modifier.padding(20.dp))
+
                 }
                 Spacer(modifier = Modifier.padding(20.dp))
-
-            }
-            Spacer(modifier = Modifier.padding(20.dp))
-            Row {
-                PreviousButton(questionNumber) {
-                    questionNumber--
-                    isClicked = false
+                Row {
+                    PreviousButton(questionNumber) {
+                        questionNumber--
+                        isClicked = false
+                    }
+                    Spacer(modifier = Modifier.padding(20.dp))
+                    NextButton(questionNumber, questions.size) {
+                        questionNumber++
+                        isClicked = false
+                    }
                 }
-                Spacer(modifier = Modifier.padding(20.dp))
-                NextButton(questionNumber, questions.size) {
-                    questionNumber++
-                    isClicked = false
-                }
-            }
                 Spacer(modifier = Modifier.size(40.dp))
                 FinishQuizButton {
                     builder.setTitle("Finish the quiz")
                         .setTitle("Are you sure to finish the game")
-                        .setPositiveButton("Yes"){dialog, which ->
-                            
+                        .setPositiveButton("Yes") { dialog, which ->
+                            isQuizFinished = true
                         }
-                        .setNegativeButton("Cancel"){dialog, which ->
+                        .setNegativeButton("Cancel") { dialog, which ->
                             println("Cancel")
                         }
                     builder.show()
 
+                }
             }
         }
     }
-
 
 }
 
@@ -261,6 +274,31 @@ fun FinishQuizButton(onClick: () -> Unit){
     }
 }
 
+@Composable
+fun ResultScreen(navController: NavHostController,score : Int,onClick: () -> Unit){
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(Color(128, 0, 128))
+        ) {
+        Text(text = "Congratulations! You have ${score} point", fontSize = 40.sp)
+        Spacer(modifier = Modifier.size(30.dp))
+
+        Row {
+            Button(onClick = {
+                onClick()
+            }) {
+                Text(text = "Return to the Main Screen")
+            }
+
+            Button(onClick = {
+                onClick()
+            }) {
+                Text(text = "Restart the game")
+            }
+
+        }
+    }
+}
 
 @Preview(showBackground = true)
 @Composable
