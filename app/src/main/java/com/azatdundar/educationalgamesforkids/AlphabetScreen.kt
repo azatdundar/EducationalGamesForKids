@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -63,11 +64,17 @@ fun AlphabetScreen(navController: NavHostController, tts: TextToSpeech?) {
                     }
                 }
 
+                Spacer(modifier = Modifier.size(30.dp))
                 nextButton(numOfChar = sizeOfAlphabet, numOfQuestions = questionNumber) {
                     if(questionNumber<sizeOfAlphabet-1){
                         questionNumber++
                     }
                 }
+            }
+            Spacer(modifier = Modifier.size(20.dp))
+
+            MainScreenButton {
+                navController.navigate("MainScreen")
             }
         }
 
@@ -133,6 +140,20 @@ fun nextButton(numOfChar : Int, numOfQuestions:Int, onClick:()->Unit){
         Icon(imageVector = Icons.Default.ArrowForward, contentDescription = "Back",
             tint = Color.Black,
             modifier = Modifier.size(30.dp))
+    }
+}
+
+@Composable
+fun MainScreenButton(onClick: () -> Unit){
+    Button(onClick = {
+        onClick()
+    },
+        shape = RoundedCornerShape(10.dp),
+        modifier = Modifier.size(height = 60.dp, width = 200.dp),
+        colors = ButtonDefaults.buttonColors(Color.Gray)
+        ) {
+            Text(text = "Return to Main Screen", fontSize = 20.sp)
+
     }
 }
 @Preview(showBackground = true, name = "Alphabet Screen Preview")
