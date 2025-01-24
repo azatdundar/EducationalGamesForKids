@@ -3,6 +3,7 @@ package com.azatdundar.educationalgamesforkids
 import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager.ComponentEnabledSetting
+import android.util.Size
 import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -278,22 +281,46 @@ fun FinishQuizButton(onClick: () -> Unit){
 fun ResultScreen(navController: NavHostController,score : Int,onClick: () -> Unit){
     Column(modifier = Modifier
         .fillMaxSize()
-        .background(Color(128, 0, 128))
+        .background(Color(0xFF000080)),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
         ) {
-        Text(text = "Congratulations! You have ${score} point", fontSize = 40.sp)
+        Text(text = "Congratulations!", fontSize = 40.sp, color = Color.White)
+        Text(text = "Your score is: ", fontSize = 40.sp, color = Color.White)
+        Text(text = " ${score}", fontSize = 60.sp, color = Color.White)
+
+
+
         Spacer(modifier = Modifier.size(30.dp))
 
         Row {
-            Button(onClick = {
-                onClick()
-            }) {
-                Text(text = "Return to the Main Screen")
-            }
 
             Button(onClick = {
                 onClick()
-            }) {
-                Text(text = "Restart the game")
+            },
+                shape = CircleShape,
+                modifier = Modifier.size(120.dp)
+                ) {
+                Icon(imageVector = Icons.Filled.Home,
+                    contentDescription = "home",
+                    tint = Color.Black,
+                    modifier = Modifier.size(60.dp)
+                    )
+            }
+            
+            Spacer(modifier = Modifier.size(20.dp))
+
+            Button(onClick = {
+                onClick()
+            },
+                shape = CircleShape,
+                modifier = Modifier.size(120.dp)
+                ) {
+                Icon(imageVector = Icons.Filled.Refresh,
+                    contentDescription = "restart",
+                    tint = Color.Black,
+                    modifier = Modifier.size(60.dp)
+                    )
             }
 
         }

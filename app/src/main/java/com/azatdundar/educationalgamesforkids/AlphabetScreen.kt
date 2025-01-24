@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -148,11 +149,15 @@ fun MainScreenButton(onClick: () -> Unit){
     Button(onClick = {
         onClick()
     },
-        shape = RoundedCornerShape(10.dp),
-        modifier = Modifier.size(height = 60.dp, width = 200.dp),
-        colors = ButtonDefaults.buttonColors(Color.Gray)
+        shape = CircleShape,
+        modifier = Modifier.size(100.dp),
+        colors = ButtonDefaults.buttonColors(Color.Green)
         ) {
-            Text(text = "Return to Main Screen", fontSize = 20.sp)
+            Icon(imageVector = Icons.Filled.Home,
+                contentDescription = "return home",
+                tint = Color.Black,
+                modifier = Modifier.size(40.dp)
+                )
 
     }
 }
