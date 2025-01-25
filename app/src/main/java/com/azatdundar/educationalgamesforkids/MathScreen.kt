@@ -1,10 +1,6 @@
 package com.azatdundar.educationalgamesforkids
 
 import android.app.AlertDialog
-import android.content.Context
-import android.content.pm.PackageManager.ComponentEnabledSetting
-import android.util.Size
-import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,12 +16,10 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -33,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -44,17 +37,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.os.requestProfiling
-import androidx.navigation.Navigation
-import androidx.navigation.navOptions
-import nl.dionsegijn.konfetti.compose.KonfettiView
-import nl.dionsegijn.konfetti.core.Party
-import nl.dionsegijn.konfetti.core.Position
-import nl.dionsegijn.konfetti.core.emitter.Emitter
-import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 
@@ -68,9 +52,6 @@ fun MathScreen(navController: NavHostController) {
 @Composable
 fun questionArea(navController: NavHostController){
 
-
-
-
     val numbers = (0..20).toMutableList()
     var questionNumber  by remember { mutableIntStateOf(0) }
     var isClicked by remember { mutableStateOf(false) }
@@ -78,12 +59,17 @@ fun questionArea(navController: NavHostController){
     var isQuizFinished by remember { mutableStateOf(false) }
     var score by remember { mutableStateOf(0) }
 
+    var toMainScreen by remember { mutableStateOf(false) }
+    var restartActivity by remember { mutableStateOf(false) }
+
     val builder = AlertDialog.Builder(LocalContext.current)
 
     val questions = Array(30) {""}
     val answers = Array(30){0}
     val options1 = Array(30){0}
     val options2 = Array(30){0}
+
+
 
 
     for(i in 0..29){
@@ -97,6 +83,7 @@ fun questionArea(navController: NavHostController){
         possible_answers.remove(options1[i])
         options2[i] = remember { possible_answers[0] }
         numbers.add(answers[i])
+
     }
 
 
@@ -108,9 +95,7 @@ fun questionArea(navController: NavHostController){
     ) {
         if (isQuizFinished) {
             val context = LocalContext.current
-            ResultScreen(navController = navController, score = score) {
-                navController.navigate("MainScreen")
-            }
+            ResultScreen(navController = navController, score = score)
         } else {
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -128,6 +113,7 @@ fun questionArea(navController: NavHostController){
                         if (options1[questionNumber] == answers[questionNumber]) {
                             isAnswerCorrect = true
                             score++
+                            println("Score : $score")
                         }
                     }
                     Spacer(modifier = Modifier.padding(30.dp))
@@ -141,6 +127,8 @@ fun questionArea(navController: NavHostController){
                         if (options2[questionNumber] == answers[questionNumber]) {
                             isAnswerCorrect = true
                             score++
+                            println("Score : $score")
+
                         }
                     }
                     Spacer(modifier = Modifier.padding(20.dp))
@@ -197,16 +185,19 @@ fun QuestionText(question : String){
 @Composable
 
 fun ButtonText(number: Int, answer : Int, isSelected : Boolean, onClick: () -> Unit){
+
+
     Button(
         onClick = {
             onClick()
         },
+
         modifier = Modifier.size(150.dp),
         shape = RoundedCornerShape(16.dp),
         colors = ButtonDefaults.buttonColors(
             when{
                 isSelected && (answer==number) -> Color.Green
-                isSelected &&(answer!=number) -> Color.Red
+                isSelected &&(answer!=number)-> Color.Red
                 else -> Color.Blue
             }
         )
@@ -278,7 +269,7 @@ fun FinishQuizButton(onClick: () -> Unit){
 }
 
 @Composable
-fun ResultScreen(navController: NavHostController,score : Int,onClick: () -> Unit){
+fun ResultScreen(navController: NavHostController,score : Int){
     Column(modifier = Modifier
         .fillMaxSize()
         .background(Color(0xFF000080)),
@@ -296,7 +287,7 @@ fun ResultScreen(navController: NavHostController,score : Int,onClick: () -> Uni
         Row {
 
             Button(onClick = {
-                onClick()
+                navController.navigate("MainScreen")
             },
                 shape = CircleShape,
                 modifier = Modifier.size(120.dp)
@@ -311,7 +302,7 @@ fun ResultScreen(navController: NavHostController,score : Int,onClick: () -> Uni
             Spacer(modifier = Modifier.size(20.dp))
 
             Button(onClick = {
-                onClick()
+                navController.navigate("MathScreen")
             },
                 shape = CircleShape,
                 modifier = Modifier.size(120.dp)
