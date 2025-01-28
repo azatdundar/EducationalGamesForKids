@@ -116,7 +116,7 @@ fun questionArea(navController: NavHostController){
 
                         if ((options1[questionNumber] == answers[questionNumber])  ) {
                             isAnswerCorrect = true
-                            if(questionStates[questionNumber].numOfClick==1){
+                            if(questionStates[questionNumber].numOfClick<=1){
                                 score++
                                 println(score)
                             }
@@ -136,7 +136,7 @@ fun questionArea(navController: NavHostController){
                         isClicked = true
                         if (options2[questionNumber] == answers[questionNumber]) {
                             isAnswerCorrect = true
-                            if(questionStates[questionNumber].numOfClick>1){
+                            if(questionStates[questionNumber].numOfClick<=1){
                                 score++
                                 println(score)
                             }
@@ -210,7 +210,7 @@ fun ButtonText(number: Int, answer : Int, isSelected : Boolean, onClick: () -> U
         colors = ButtonDefaults.buttonColors(
             when{
                 isSelected && (answer==number) -> Color.Green
-                isSelected &&(answer!=number)-> Color.Red
+                isSelected &&(answer!=number) -> Color.Red
                 else -> Color.Blue
             }
         )
