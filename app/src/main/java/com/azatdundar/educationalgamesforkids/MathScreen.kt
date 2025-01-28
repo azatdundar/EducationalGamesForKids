@@ -40,7 +40,8 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import kotlin.random.Random
-
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @Composable
 fun MathScreen(navController: NavHostController) {
@@ -58,6 +59,7 @@ fun questionArea(navController: NavHostController){
     var isAnswerCorrect by remember { mutableStateOf(false) }
     var isQuizFinished by remember { mutableStateOf(false) }
     var score by remember { mutableStateOf(0) }
+    val questionStates = remember {Array(30){it-> QuestionState(it)} }
 
     var toMainScreen by remember { mutableStateOf(false) }
     var restartActivity by remember { mutableStateOf(false) }
@@ -109,12 +111,19 @@ fun questionArea(navController: NavHostController){
                         answer = answers[questionNumber],
                         isSelected = isClicked
                     ) {
+                        questionStates[questionNumber].numOfClick++
                         isClicked = true
-                        if (options1[questionNumber] == answers[questionNumber]) {
+
+                        if ((options1[questionNumber] == answers[questionNumber])  ) {
                             isAnswerCorrect = true
-                            score++
+                            if(questionStates[questionNumber].numOfClick==1){
+                                score++
+                                println(score)
+                            }
+
                             println("Score : $score")
                         }
+
                     }
                     Spacer(modifier = Modifier.padding(30.dp))
 
@@ -123,10 +132,14 @@ fun questionArea(navController: NavHostController){
                         answer = answers[questionNumber],
                         isSelected = isClicked
                     ) {
+                        questionStates[questionNumber].numOfClick++
                         isClicked = true
                         if (options2[questionNumber] == answers[questionNumber]) {
                             isAnswerCorrect = true
-                            score++
+                            if(questionStates[questionNumber].numOfClick>1){
+                                score++
+                                println(score)
+                            }
                             println("Score : $score")
 
                         }
