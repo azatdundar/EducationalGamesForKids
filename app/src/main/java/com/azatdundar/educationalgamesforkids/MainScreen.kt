@@ -9,17 +9,21 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -35,23 +39,38 @@ fun MainScreen(navController: NavHostController) {
         Column {
             InformationText()
             Spacer(modifier = Modifier.padding(10.dp))
-            Row(modifier = Modifier.fillMaxWidth(),
+            Row(modifier = Modifier.fillMaxWidth()
+                .weight(1f)
+                .clip(CircleShape),
 
                 horizontalArrangement = Arrangement.Center) {
-                CategoryImage(imageRes = R.drawable.math_image, categoryName = "Math") {
+                CategoryImage(imageRes = R.drawable.math, categoryName = "Math") {
                     navController.navigate("MathScreen")
                 }
             }
 
-            Row(modifier = Modifier.fillMaxWidth()
-                .scale(0.5f),
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .scale(0.7f),
                 horizontalArrangement = Arrangement.Center
-            ){
-                CategoryImage(imageRes = R.drawable.alfabe, categoryName = "Alfabe" ) {
+            ) {
+                CategoryImage(imageRes = R.drawable.alphabet, categoryName = "Alfabe") {
                     navController.navigate("AlphabetScreen")
                 }
+
+
             }
 
+            Row(modifier = Modifier.fillMaxWidth()
+                .weight(1f)
+                .scale(0.75f),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                CategoryImage(imageRes = R.drawable.jobs, categoryName = "Jobs") {
+
+                }
+            }
 
 
 
@@ -81,4 +100,12 @@ fun CategoryImage(imageRes : Int, categoryName : String, onClick: ()->Unit){
     Image(painter = image,
         contentDescription = categoryName,
         modifier = Modifier.clickable(onClick = onClick))
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewMainScreen() {
+    // MainScreen fonksiyonunun önizlemesini burada gösteriyoruz
+    MainScreen(navController = NavHostController(LocalContext.current))
 }

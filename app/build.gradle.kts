@@ -50,6 +50,8 @@ android {
 }
 
 dependencies {
+    implementation(platform("androidx.compose:compose-bom:2023.08.00"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     val nav_version = "2.8.4"
 
 

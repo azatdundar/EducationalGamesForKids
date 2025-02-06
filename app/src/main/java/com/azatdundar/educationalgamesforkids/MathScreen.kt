@@ -61,6 +61,7 @@ fun questionArea(navController: NavHostController){
     var score by remember { mutableStateOf(0) }
     val questionStates = remember {Array(30){it-> QuestionState(it)} }
 
+
     var toMainScreen by remember { mutableStateOf(false) }
     var restartActivity by remember { mutableStateOf(false) }
 
@@ -111,10 +112,13 @@ fun questionArea(navController: NavHostController){
                         answer = answers[questionNumber],
                         isSelected = isClicked
                     ) {
-                        questionStates[questionNumber].numOfClick++
-                        isClicked = true
 
+                        questionStates[questionNumber].numOfClick++
+                        println(questionStates[questionNumber].numOfClick)
+
+                        isClicked = true
                         if ((options1[questionNumber] == answers[questionNumber])  ) {
+
                             isAnswerCorrect = true
                             if(questionStates[questionNumber].numOfClick<=1){
                                 score++
@@ -123,6 +127,8 @@ fun questionArea(navController: NavHostController){
 
                             println("Score : $score")
                         }
+
+
 
                     }
                     Spacer(modifier = Modifier.padding(30.dp))
@@ -133,7 +139,10 @@ fun questionArea(navController: NavHostController){
                         isSelected = isClicked
                     ) {
                         questionStates[questionNumber].numOfClick++
+                        println(questionStates[questionNumber].numOfClick)
                         isClicked = true
+
+
                         if (options2[questionNumber] == answers[questionNumber]) {
                             isAnswerCorrect = true
                             if(questionStates[questionNumber].numOfClick<=1){
@@ -210,7 +219,7 @@ fun ButtonText(number: Int, answer : Int, isSelected : Boolean, onClick: () -> U
         colors = ButtonDefaults.buttonColors(
             when{
                 isSelected && (answer==number) -> Color.Green
-                isSelected &&(answer!=number) -> Color.Red
+                isSelected &&(answer!=number)  -> Color.Red
                 else -> Color.Blue
             }
         )
