@@ -1,5 +1,6 @@
 package com.azatdundar.educationalgamesforkids
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,8 +41,7 @@ fun MainScreen(navController: NavHostController) {
             InformationText()
             Spacer(modifier = Modifier.padding(10.dp))
             Row(modifier = Modifier.fillMaxWidth()
-                .weight(1f)
-                .clip(CircleShape),
+                .weight(1f),
 
                 horizontalArrangement = Arrangement.Center) {
                 CategoryImage(imageRes = R.drawable.math, categoryName = "Math") {
@@ -52,7 +52,8 @@ fun MainScreen(navController: NavHostController) {
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .scale(0.7f),
+                .scale(0.7f)
+               ,
                 horizontalArrangement = Arrangement.Center
             ) {
                 CategoryImage(imageRes = R.drawable.alphabet, categoryName = "Alfabe") {
@@ -67,8 +68,11 @@ fun MainScreen(navController: NavHostController) {
                 .scale(0.75f),
                 horizontalArrangement = Arrangement.Center
             ) {
+                val localContext = LocalContext.current
                 CategoryImage(imageRes = R.drawable.jobs, categoryName = "Jobs") {
 
+                    val intent = Intent(localContext, JobsActivity::class.java)
+                    localContext.startActivity(intent)
                 }
             }
 
@@ -82,7 +86,7 @@ fun MainScreen(navController: NavHostController) {
 }
 
 @Composable
-fun InformationText() {
+ fun InformationText() {
     Text(
         text = "This application is designed for kids to help them learn english, basit math etc.",
         color = Color.Blue,
