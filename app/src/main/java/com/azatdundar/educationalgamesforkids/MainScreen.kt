@@ -71,8 +71,7 @@ fun MainScreen(navController: NavHostController) {
                 val localContext = LocalContext.current
                 CategoryImage(imageRes = R.drawable.jobs, categoryName = "Jobs") {
 
-                    val intent = Intent(localContext, JobsActivity::class.java)
-                    localContext.startActivity(intent)
+                    navController.navigate("JobsScreen")
                 }
             }
 
@@ -95,6 +94,7 @@ fun MainScreen(navController: NavHostController) {
             fontSize = 22.sp
         )
     )
+
 }
 
 @Composable

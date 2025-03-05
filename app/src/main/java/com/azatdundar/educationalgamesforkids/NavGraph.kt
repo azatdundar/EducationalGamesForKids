@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun Nav(tts : TextToSpeech?){
+fun Nav(){
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "MainScreen"){
@@ -20,7 +20,11 @@ fun Nav(tts : TextToSpeech?){
         }
 
         composable(route ="AlphabetScreen") {
-            AlphabetScreen(navController = navController, tts = tts)
+            AlphabetScreen(navController = navController)
+        }
+
+        composable(route ="JobsScreen") {
+            JobsScreen(navController = navController)
         }
     }
 

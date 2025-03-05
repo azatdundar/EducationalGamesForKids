@@ -40,7 +40,7 @@ import androidx.navigation.compose.rememberNavController
 
 
 @Composable
-fun AlphabetScreen(navController: NavHostController, tts: TextToSpeech?) {
+fun AlphabetScreen(navController: NavHostController) {
 
     val alphabet = listOf(
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
@@ -166,6 +166,6 @@ fun MainScreenButton(onClick: () -> Unit){
 fun PreviewAlphabetScreen() {
     val navController = rememberNavController()
     Surface {
-        AlphabetScreen(navController, tts = null)
+        AlphabetScreen(navController)
     }
 }
