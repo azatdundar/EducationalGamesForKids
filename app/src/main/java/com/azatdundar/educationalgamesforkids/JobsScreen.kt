@@ -57,22 +57,18 @@ fun JobsScreen(navController: NavController) {
 
     var isFinished by remember{ mutableStateOf(false) }
 
-    var deneme = Random.nextInt()
+
 
     for (i in 0..5){
         var randomIndex1 = indexes.random()
-        println("RandomIndex1 : $randomIndex1")
         indexes.remove(randomIndex1)
         var randomIndex2 = indexes.random()
-        println("RandomIndex1 : $randomIndex2")
         indexes.add(randomIndex1)
         jobNames1[i] = remember{jobs[randomIndex1]}
         jobNames2[i] =remember{jobs[randomIndex2]}
         val answer = if(Random.nextBoolean()) jobs[randomIndex1] else jobs[randomIndex2]
-        questions[i] = remember{JobQuestion(jobImages[randomIndex1],jobImages[randomIndex2], answer = answer, imageName1 = jobNames1[questionNumber], imageName2 = jobNames2[questionNumber])}
-        println(println("Question Number : $i : "+ questions[i].imageName1 + questions[i].imageName2) )
-        var deneme = remember{Random.nextInt(0,8)}
-        println("Deneme degiskeni: $deneme")
+        questions[i] = remember{JobQuestion(jobImages[randomIndex1],jobImages[randomIndex2], answer = answer, imageName1 = jobNames1[i], imageName2 = jobNames2[i])}
+
     }
 
 
@@ -81,17 +77,19 @@ fun JobsScreen(navController: NavController) {
 
     var remainingTime by remember { mutableStateOf(60) }
 
-    val timer = object : CountDownTimer(600000,1000){
-        override fun onTick(p0: Long) {
-            if(remainingTime>0){
-                remainingTime--
+    val timer = remember{
+        object : CountDownTimer(60000,1000){
+            override fun onTick(p0: Long) {
+                if(p0/1000>0){
+                    remainingTime--
+                }
             }
-        }
 
-        override fun onFinish() {
-            isFinished = true
-        }
+            override fun onFinish() {
+                isFinished = true
+            }
 
+        }
     }
     timer.start()
 
@@ -99,7 +97,7 @@ fun JobsScreen(navController: NavController) {
         ResultScreen(score = score, navController =navController )
     }
 
-        else{
+    else{
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
@@ -125,12 +123,10 @@ fun JobsScreen(navController: NavController) {
 
 
                     if (jobNames1[questionNumber] == questions[questionNumber].answer) {
-                        println("Answer is correct")
-                    } else {
-                        println("Answer is wrong")
+                        score++
                     }
 
-                    if (questionNumber < 5) {
+                    if (questionNumber < questions.size-1) {
                         questionNumber++
                     } else {
                         isFinished = true
@@ -148,11 +144,14 @@ fun JobsScreen(navController: NavController) {
                 )
                 {
                     if (jobNames2[questionNumber] == questions[questionNumber].answer) {
-                        println("Answer is correct")
-                    } else {
-                        println("Answer is wrong")
+
+                        score++
                     }
-                    questionNumber++
+                    if (questionNumber < questions.size-1) {
+                        questionNumber++
+                    } else {
+                        isFinished = true
+                    }
                 }
 
 
@@ -185,8 +184,8 @@ fun ResultScreen(score : Int, navController: NavController){
             Button(onClick = {
                 navController.navigate("MainScreen")
             },
-            modifier = Modifier.size(100.dp)
-                ) {
+                modifier = Modifier.size(100.dp)
+            ) {
                 Icon(imageVector = Icons.Filled.Home, contentDescription = "Home")
             }
             Spacer(modifier = Modifier.size(30.dp))
@@ -194,8 +193,8 @@ fun ResultScreen(score : Int, navController: NavController){
             Button(onClick = {
                 navController.navigate("JobsScreen")
             },
-            modifier = Modifier.size(100.dp)
-                ) {
+                modifier = Modifier.size(100.dp)
+            ) {
                 Icon(imageVector = Icons.Filled.Refresh, contentDescription = "Restar")
             }
         }
