@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -91,7 +92,13 @@ fun JobsScreen(navController: NavController) {
 
         }
     }
-    timer.start()
+
+    LaunchedEffect(Unit){
+
+
+        timer.start()
+
+    }
 
     if(isFinished){
         ResultScreen(score = score, navController =navController )
@@ -173,7 +180,7 @@ fun ResultScreen(score : Int, navController: NavController){
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Image(painter = painterResource(R.drawable.award), contentDescription = "Konfetti",
+        Image(painter = painterResource(R.drawable.award_image), contentDescription = "Konfetti",
             modifier = Modifier.size(300.dp))
         Text(text = "Congratulations !", fontSize = 50.sp)
         Spacer(modifier = Modifier.size(30.dp))
